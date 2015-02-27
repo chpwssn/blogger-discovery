@@ -63,8 +63,11 @@ def check_range(start_num, end_num):
                     if userid:
                         yield 'user:{0}'.format(userid)
 
-                    for blog in extract_blogs(text):
+                    for blog in extract_blogspot_blogs(text):
                         yield 'blog:{0}'.format(blog)
+            
+                    for blog in extract_all_blogs(text):
+                        yield 'anyblog:{0}'.format(blog)
                 break  # stop the while loop
 
             counter += 1
@@ -107,10 +110,20 @@ def extract_handle(text):
         return match.group(1)
 
 
-def extract_blogs(text):
+def extract_blogspot_blogs(text):
     '''Return a list of tags from the text.'''
     # Search for "http://onwonder.blogspot.com/"
     return re.findall(r'"https?://([^\.]+)\.blogspot\.[a-z]+/"', text)
+
+def extract_all_blogs(text):
+    #Search for "http://evhead.com/" rel="contributor-to nofollow"
+    bloglinks_untrimmed = re.findall(r'"https?://[a-zA-Z0-9\.\/]+" rel="contributor-to nofollow"', text)
+    bloglinks = []
+    for bloglink in bloglinks_untrimmed:
+        for link in re.findall(r'https?://.+/',bloglink):
+            bloglinks.append(link)
+    return bloglinks
+
 
 if __name__ == '__main__':
     main()

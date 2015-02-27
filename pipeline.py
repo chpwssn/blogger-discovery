@@ -31,10 +31,10 @@ if StrictVersion(seesaw.__version__) < StrictVersion("0.1.5"):
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
 
-VERSION = "20150225.01"
-USER_AGENT = 'ArchiveTeam'
+VERSION = "20150226.01"
+USER_AGENT = 'ChipATDev'
 TRACKER_ID = 'bloggerdisco'
-TRACKER_HOST = 'tracker.archiveteam.org'
+TRACKER_HOST = 'tracker.nerds.io:9080'
 
 
 ###########################################################################

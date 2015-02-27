@@ -63,9 +63,12 @@ def check_range(start_num, end_num):
                     if userid:
                         yield 'user:{0}'.format(userid)
 
+                    #Extract all blogspot subdomain links from the page
                     for blog in extract_blogspot_blogs(text):
                         yield 'blog:{0}'.format(blog)
             
+                    #Extract links for the blogs this user owns AKA My blogs
+                    #"anyblog" for any domain blog
                     for blog in extract_all_blogs(text):
                         yield 'anyblog:{0}'.format(blog)
                 break  # stop the while loop
@@ -117,6 +120,7 @@ def extract_blogspot_blogs(text):
 
 def extract_all_blogs(text):
     #Search for "http://evhead.com/" rel="contributor-to nofollow"
+    #All of the My blogs appear to have this in the anchor tag
     bloglinks_untrimmed = re.findall(r'"https?://[a-zA-Z0-9\.\/]+" rel="contributor-to nofollow"', text)
     bloglinks = []
     for bloglink in bloglinks_untrimmed:

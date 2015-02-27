@@ -58,9 +58,12 @@ def check_range(country_code,start_num, end_num):
             else:
                 if text:
                     yield 'country_code:{0} start:{1}'.format(country_code,shortcode)
-                    
+                    previous_profile = ""
                     for profile in extract_profiles(text):
-                        yield 'profile:{0}'.format((profile.split("/")[4:])[0])
+                        profile_number = (profile.split("/")[4:])[0]
+                        if not profile_number == previous_profile:
+                            yield 'profile:{0}'.format(profile_number)
+                            previous_profile = profile_number
                 break  # stop the while loop
             counter += 1
 

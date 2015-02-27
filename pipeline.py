@@ -118,6 +118,11 @@ class CustomProcessArgs(object):
             start_num, end_num = item_value.split('-', 1)
             return ['python', 'discover.py', start_num, end_num,
                     "%(item_dir)s/%(warc_file_base)s.txt.gz" % item]
+        if item_type == 'country_index':
+            # Expect something like page:0-999 or page:1000-1999
+            country_code, start_num, end_num = item_value.split('-', 1)
+            return ['python', 'countrybrowse.py', start_num, end_num, country_code,
+                    "%(item_dir)s/%(warc_file_base)s.txt.gz" % item]
         else:
             raise ValueError('unhandled item type: {0}'.format(item_type))
 

@@ -31,7 +31,7 @@ if StrictVersion(seesaw.__version__) < StrictVersion("0.1.5"):
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
 
-VERSION = "20150226.01"
+VERSION = "20150226.02"
 USER_AGENT = 'ChipATDev'
 TRACKER_ID = 'bloggerdisco'
 TRACKER_HOST = 'tracker.nerds.io:9080'
@@ -119,8 +119,9 @@ class CustomProcessArgs(object):
             return ['python', 'discover.py', start_num, end_num,
                     "%(item_dir)s/%(warc_file_base)s.txt.gz" % item]
         if item_type == 'country_index':
-            # Expect something like page:0-999 or page:1000-1999
-            country_code, start_num, end_num = item_value.split('-', 1)
+            # Scrape the Blogger Browse by Country pages for profiles
+            # Expect something like contry_index:US-0-50 or country_index:VU-400-500
+            country_code, start_num, end_num = item_value.split('-', 2)
             return ['python', 'countrybrowse.py', start_num, end_num, country_code,
                     "%(item_dir)s/%(warc_file_base)s.txt.gz" % item]
         else:

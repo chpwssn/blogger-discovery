@@ -11,6 +11,8 @@ DEFAULT_HEADERS = {'User-Agent': 'ChipATDev'}
 
 class FetchError(Exception):
     '''Custom error class when fetching does not meet our expectation.'''
+class RateLimiterError(Exception):
+    '''Custom error class when fetching returns the rate limiter.'''
 
 
 def main():
@@ -54,6 +56,9 @@ def check_range(start_num, end_num):
                 # The server may be overloaded so wait a bit
                 print('Sleeping... If you see this')
                 time.sleep(10)
+            except RateLimiterError:
+                yield '503:{0}'.format(num)
+                break
             else:
                 if text:
                     yield 'id:{0}'.format(shortcode)
@@ -81,7 +86,7 @@ def fetch(url):
 
     Returns True, returns the response text. Otherwise, returns None
     '''
-    time.sleep(random.randint(10,25))
+    #time.sleep(random.randint(10,25))
     print('Fetch', url)
     response = requests.get(url, headers=DEFAULT_HEADERS)
 
@@ -93,8 +98,9 @@ def fetch(url):
         if not response.text:
             # If HTML is empty maybe server broke
             raise FetchError()
-
         return response.text
+    elif response.status_code == 503:
+        raise RateLimiterError()
     elif response.status_code == 404:
         # Does not exist
         return
